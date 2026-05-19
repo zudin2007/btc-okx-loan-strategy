@@ -1,4 +1,3 @@
-
 # 🚀 Bitcoin OKX Loan Strategy Dashboard
 
 Real-time monitoring dashboard for achieving 1 Bitcoin via modified recursive leverage strategy.
@@ -144,4 +143,3 @@ This project is open source for personal use and educational purposes.
 **Next Milestone:** 0.25 BTC target
 
 **💡 Pro Tip:** Bookmark this page and visit monthly to track progress! 📈
-EOF
