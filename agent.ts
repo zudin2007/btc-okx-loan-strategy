@@ -1,27 +1,24 @@
-// agent.ts — Claude Agents SDK + Composio
+// agent.ts — Vercel AI SDK + Composio
 
-import { query } from "@anthropic-ai/claude-agent-sdk";
+import { anthropic } from "@ai-sdk/anthropic";
 import { Composio } from "@composio/core";
+import { VercelProvider } from "@composio/vercel";
+import { stepCountIs, streamText } from "ai";
 
-const composio = new Composio();
+const composio = new Composio({ provider: new VercelProvider() });
 const userId = "user_p82w6";
 
 // Create a tool router session
 const session = await composio.create(userId);
+const tools = await session.tools();
 
-// Query Claude with MCP tools
-const stream = await query({
+const stream = await streamText({
+  model: anthropic("claude-sonnet-4-6"),
   prompt: "Star the composiohq/composio repo on GitHub",
-  options: {
-    permissionMode: "bypassPermissions",
-    mcpServers: {
-      composio: session.mcp,
-    },
-  },
+  stopWhen: stepCountIs(10),
+  tools,
 });
 
-for await (const event of stream) {
-  if (event.type === "result" && event.subtype === "success") {
-    process.stdout.write(event.result);
-  }
+for await (const textPart of stream.textStream) {
+  process.stdout.write(textPart);
 }
